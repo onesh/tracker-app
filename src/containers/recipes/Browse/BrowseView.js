@@ -162,7 +162,7 @@ class RecipeTabs extends Component {
         renderScene={this.renderScene}
         renderHeader={this.renderHeader}
         navigationState={this.state.navigation}
-        onRequestChangeTab={this.handleChangeTab}
+        onIndexChange={this.handleChangeTab}
       />
     );
   }

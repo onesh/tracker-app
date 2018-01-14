@@ -63,14 +63,6 @@ const scenes = (
       component={Error}
       icon={props => TabIcon({ ...props, icon: 'error' })}
     />
-
-    <Scene
-      key={'styleGuide'}
-      {...navbarPropsTabs}
-      title={'Style Guide'}
-      component={StyleGuide}
-      icon={props => TabIcon({ ...props, icon: 'speaker-notes' })}
-    />
   </Scene>
 );
 

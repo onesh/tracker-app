@@ -5,6 +5,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import MapView from 'react-native-maps';
 
 // Consts and Libs
 import { AppStyles, AppSizes, AppColors } from '@theme/';
@@ -38,7 +39,14 @@ class Authenticate extends Component {
         source={require('../../images/logo.png')}
         style={[styles.logo]}
       />
-
+      <MapView style={{height: 100, width: 100}}
+    initialRegion={{
+      latitude: 37.78825,
+      longitude: -122.4324,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421,
+    }}
+  />
       <View style={[AppStyles.row, AppStyles.paddingHorizontal]}>
         <View style={[AppStyles.flex1]}>
           <Button
