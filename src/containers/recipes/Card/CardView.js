@@ -77,7 +77,7 @@ class Map extends Component {
 }
 
   static propTypes = {
-    title: PropTypes.string.isRequired,
+    title: PropTypes.array.isRequired,
     onPress: PropTypes.func,
   }
 
@@ -105,7 +105,7 @@ class Map extends Component {
 
     for (let i=0; i<count; i++) {
     toRender.push(
-    <View style={style.container}>
+    <View id={Math.random()} style={style.container}>
 
 <View style={style.mapCard}>
 
@@ -121,19 +121,17 @@ class Map extends Component {
 
     <View style={style.mapHolderBody}>
     <MapView style={{height: 360 , width: 280}}
-    provider="google"
-      showsUserLocation={true}
-      showsMyLocationButton={true}
-      showsCompass={true}
-      followsUserLocation={true}
-      loadingEnabled={true}
-      toolbarEnabled={true}
-      zoomEnabled={true}
-      rotateEnabled={true}
-      initialRegion={this.state.location}
-        />
-     </View>
+    region={this.state.location}
+    onRegionChange={this.onRegionChange}
+  >
+      <MapView.Marker
+        coordinate={this.state.location}
+        title={'Last Location'}
+        description={'Last Location'}
+      />
 
+  </MapView>
+      </View>
      <View style={{backgroundColor: 'aliceblue', height: 20}}>
      <Text>Last Updated at: '1/21/18'</Text>
      </View>
