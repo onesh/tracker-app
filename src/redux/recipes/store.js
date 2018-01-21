@@ -1,7 +1,6 @@
 export default {
   meals: [
-    { id: 1, title: 'Lunch' },
-    { id: 2, title: 'Dinner' },
+    { id: 1, title: 'Your Trackers' },
   ],
   recipes: [
     {

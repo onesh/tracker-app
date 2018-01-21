@@ -13,7 +13,7 @@ import { Actions } from 'react-native-router-flux';
 import * as RecipeActions from '@redux/recipes/actions';
 
 // Components
-import RecipeCardRender from './CardView';
+import MapRendererElement from './CardView';
 
 /* Redux ==================================================================== */
 // What data from the store shall we send to the component?
@@ -28,8 +28,8 @@ const mapDispatchToProps = {
 };
 
 /* Component ==================================================================== */
-class RecipeCard extends Component {
-  static componentName = 'RecipeCard';
+class MapRenderer extends Component {
+  static componentName = 'MapRenderer';
 
   static propTypes = {
     recipe: PropTypes.shape({
@@ -113,19 +113,12 @@ class RecipeCard extends Component {
   render = () => {
     const { recipe } = this.state;
     const { user } = this.props;
-
+    title = ['Kiran(kiru)  1/21/18 8:32AM', 'Ayushi(pihu)  1/21/18 8:32AM', 'Karan(kittu)  1/21/18 8:32AM']
     return (
-      <RecipeCardRender
-        title={recipe.title}
-        body={recipe.body}
-        image={recipe.image}
-        onPress={this.onPressCard}
-        onPressFavourite={(user && user.uid) ? this.onPressFavourite : null}
-        isFavourite={(user && user.uid && this.isFavourite()) && true}
-      />
+      <MapRendererElement onPress={this.onPressCard} title={title} />
     );
   }
 }
 
 /* Export Component ==================================================================== */
-export default connect(mapStateToProps, mapDispatchToProps)(RecipeCard);
+export default connect(mapStateToProps, mapDispatchToProps)(MapRenderer);

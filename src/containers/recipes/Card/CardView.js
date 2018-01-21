@@ -11,6 +11,7 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
+  Button
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 
@@ -19,27 +20,76 @@ import { AppStyles } from '@theme/';
 
 // Components
 import { Card, Text } from '@ui/';
+import MapView from 'react-native-maps';
+
 
 /* Styles ==================================================================== */
-const styles = StyleSheet.create({
+const style = StyleSheet.create({
   favourite: {
     position: 'absolute',
     top: -45,
     right: 0,
   },
+mapHolderHeader: {
+backgroundColor: 'aliceblue',
+},
+mapHolderBody: {
+
+},
+container: {
+position: 'relative',
+height: 450,
+width: 360,
+backgroundColor: 'white'
+},
+mapCard: {
+  position: 'absolute',
+  left: 30,
+  top: 25,
+  borderWidth: 0,
+  borderRadius: 0,
+  borderColor: 'gray',
+  borderBottomWidth: 0,
+  shadowColor: 'gray',
+  shadowOffset: { width: 5, height: 2 },
+  shadowOpacity: 0.4,
+  shadowRadius: 5,
+  elevation: 6,
+  marginLeft: 5,
+  marginRight: 5,
+  marginTop: 10,
+}
 });
 
 /* Component ==================================================================== */
-class RecipeCard extends Component {
-  static componentName = 'RecipeCard';
+class Map extends Component {
+  static componentName = 'Map';
+  constructor() {
+  super();
+  this.state = {
+    location: {
+      latitude: 28.6315,
+      longitude: 77.2167,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421,
+    }
+  };
+}
 
   static propTypes = {
-    image: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    body: PropTypes.string.isRequired,
     onPress: PropTypes.func,
-    onPressFavourite: PropTypes.func,
-    isFavourite: PropTypes.bool,
+  }
+
+  onPressLearnMore =  () => {
+    this.setState({
+      location: {
+        latitude: 28.6315,
+        longitude: 77.2167,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      }
+    });
   }
 
   static defaultProps = {
@@ -49,37 +99,59 @@ class RecipeCard extends Component {
   }
 
   render = () => {
-    const { title, body, image, onPress, onPressFavourite, isFavourite } = this.props;
+    const { title, onPress } = this.props;
+    const count = title.length;
+    const toRender = [];
+
+    for (let i=0; i<count; i++) {
+    toRender.push(
+    <View style={style.container}>
+
+<View style={style.mapCard}>
+
+
+    <View style={style.mapHolderHeader}>
+    <Text>{title[i]}</Text>
+    <Button
+      onPress={this.onPressLearnMore}
+      title="Re-centre"
+      color="#841584"
+    />
+    </View>
+
+    <View style={style.mapHolderBody}>
+    <MapView style={{height: 360 , width: 280}}
+    provider="google"
+      showsUserLocation={true}
+      showsMyLocationButton={true}
+      showsCompass={true}
+      followsUserLocation={true}
+      loadingEnabled={true}
+      toolbarEnabled={true}
+      zoomEnabled={true}
+      rotateEnabled={true}
+      initialRegion={this.state.location}
+        />
+     </View>
+
+     <View style={{backgroundColor: 'aliceblue', height: 20}}>
+     <Text>Last Updated at: '1/21/18'</Text>
+     </View>
+
+</View>
+     </View>
+
+
+      );
+  }
 
     return (
-      <TouchableOpacity activeOpacity={0.8} onPress={onPress}>
-        <Card image={image && { uri: image }}>
-          <View style={[AppStyles.paddingBottomSml]}>
-            <Text h3>{title}</Text>
-            <Text>{body}</Text>
-
-            {!!onPressFavourite &&
-              <TouchableOpacity
-                activeOpacity={0.8}
-                onPress={onPressFavourite}
-                style={[styles.favourite]}
-              >
-                <Icon
-                  raised
-                  name={'star-border'}
-                  color={isFavourite ? '#FFFFFF' : '#FDC12D'}
-                  containerStyle={{
-                    backgroundColor: isFavourite ? '#FDC12D' : '#FFFFFF',
-                  }}
-                />
-              </TouchableOpacity>
-            }
-          </View>
-        </Card>
-      </TouchableOpacity>
+      <View style={[AppStyles.containerCentered, AppStyles.container, {backgroundColor: 'white'}]}>
+      {toRender}
+      </View>
     );
   }
 }
 
 /* Export Component ==================================================================== */
-export default RecipeCard;
+export default Map;

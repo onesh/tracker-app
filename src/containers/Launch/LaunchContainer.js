@@ -20,8 +20,6 @@ const mapStateToProps = () => ({
 // Any actions to map to the component?
 const mapDispatchToProps = {
   login: UserActions.login,
-  getRecipes: RecipeActions.getRecipes,
-  getMeals: RecipeActions.getMeals,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppLaunchRender);
