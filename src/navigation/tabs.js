@@ -10,7 +10,7 @@ import { TabIcon } from '@ui/';
 import { NavbarMenuButton } from '@containers/ui/NavbarMenuButton/NavbarMenuButtonContainer';
 
 // Scenes
-import Placeholder from '@components/general/Placeholder';
+import allTrackers from '@components/general/allTrackers';
 import Error from '@components/general/Error';
 import StyleGuide from '@containers/StyleGuideView';
 import Recipes from '@containers/recipes/Browse/BrowseContainer';
@@ -30,8 +30,8 @@ const scenes = (
   <Scene key={'tabBar'} tabs tabBarIconContainerStyle={AppStyles.tabbar} pressOpacity={0.95}>
     <Scene
       {...navbarPropsTabs}
-      key={'recipes'}
-      title={'Recipes'}
+      key={'tracker'}
+      title={'trackers'}
       icon={props => TabIcon({ ...props, icon: 'search' })}
     >
       <Scene
@@ -51,8 +51,8 @@ const scenes = (
     <Scene
       key={'timeline'}
       {...navbarPropsTabs}
-      title={'Coming Soon'}
-      component={Placeholder}
+      title={'All Trackers'}
+      component={allTrackers}
       icon={props => TabIcon({ ...props, icon: 'timeline' })}
     />
 

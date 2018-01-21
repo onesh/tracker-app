@@ -9,7 +9,6 @@ import Drawer from '@containers/ui/DrawerContainer';
 
 // Scenes
 import AppLaunch from '@containers/Launch/LaunchContainer';
-import Placeholder from '@components/general/Placeholder';
 import AuthScenes from './auth';
 import TabsScenes from './tabs';
 
@@ -34,12 +33,6 @@ export default Actions.create(
       </Scene>
 
       {/* General */}
-      <Scene
-        clone
-        key={'comingSoon'}
-        title={'Coming Soon'}
-        component={Placeholder}
-      />
     </Scene>
   </Scene>,
 );
