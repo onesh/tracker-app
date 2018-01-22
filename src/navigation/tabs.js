@@ -38,7 +38,7 @@ const scenes = (
         {...navbarPropsTabs}
         key={'recipesListing'}
         component={Recipes}
-        title={'Recipes'}
+        title={'DigiFence'}
       />
       <Scene
         {...AppConfig.navbarProps}
