@@ -30,26 +30,15 @@ const style = StyleSheet.create({
     top: -45,
     right: 0,
   },
-mapHolderHeader: {
-backgroundColor: 'aliceblue',
-},
 mapHolderBody: {
 
 },
-container: {
-position: 'relative',
-height: 450,
-width: 360,
-backgroundColor: 'white'
-},
 mapCard: {
-  position: 'absolute',
-  left: 30,
-  top: 25,
+  paddingLeft: 15,
+  paddingTop: 25,
   borderWidth: 0,
   borderRadius: 0,
   borderColor: 'gray',
-  borderBottomWidth: 0,
   shadowColor: 'gray',
   shadowOffset: { width: 5, height: 2 },
   shadowOpacity: 0.4,
@@ -67,11 +56,12 @@ class Map extends Component {
   constructor() {
   super();
   this.state = {
-    location: {
+    tone: {
       latitude: 28.6315,
       longitude: 77.2167,
       latitudeDelta: 0.0922,
       longitudeDelta: 0.0421,
+      lastUpdated: '1/21/18 8:32AM'
     }
   };
 }
@@ -83,13 +73,18 @@ class Map extends Component {
 
   onPressLearnMore =  () => {
     this.setState({
-      location: {
+      tone: {
         latitude: 28.6315,
         longitude: 77.2167,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
+        lastUpdated: '1/21/18 8:32AM'
       }
     });
+  }
+
+  getDescription = () => {
+    return this.state.tone.lastUpdated;
   }
 
   static defaultProps = {
@@ -105,46 +100,41 @@ class Map extends Component {
 
     for (let i=0; i<count; i++) {
     toRender.push(
-    <View id={Math.random()} style={style.container}>
-
-<View style={style.mapCard}>
-
-
-    <View style={style.mapHolderHeader}>
-    <Text>{title[i]}</Text>
-    <Button
-      onPress={this.onPressLearnMore}
-      title="Re-centre"
-      color="#841584"
-    />
-    </View>
-
+    <View style={style.mapCard}>
+      <View>
+          <View style={[{flexDirection:'row', justifyContent: 'center'}]}>
+            <Text style={{marginLeft: 0}}>{title[i]}</Text>
+            <Button
+              onPress={this.onPressLearnMore}
+              title="Re-centre"
+              color="#841584"
+            />
+          </View>
     <View style={style.mapHolderBody}>
-    <MapView style={{height: 360 , width: 280}}
-    region={this.state.location}
-    onRegionChange={this.onRegionChange}
-  >
-      <MapView.Marker
-        coordinate={this.state.location}
-        title={'Last Location'}
-        description={'Last Location'}
-      />
+            <MapView style={{height: 360 , width: 300, marginLeft: 10}}
+            region={this.state.tone}
+            onRegionChange={this.onRegionChange}
+          >
+              <MapView.Marker
+                coordinate={this.state.tone}
+                title={'Last Updated At'}
+                description={this.state.tone.lastUpdated}
+              />
 
-  </MapView>
-      </View>
-     <View style={{backgroundColor: 'aliceblue', height: 20}}>
-     <Text>Last Updated at: '1/21/18'</Text>
-     </View>
-
+          </MapView>
+    </View>
+    <View>
+         <Text>Last Updated at: '1/21/18'</Text>
+    </View>
+  </View>
 </View>
-     </View>
 
 
       );
   }
 
     return (
-      <View style={[AppStyles.containerCentered, AppStyles.container, {backgroundColor: 'white'}]}>
+      <View style={{backgroundColor: 'white'}}>
       {toRender}
       </View>
     );

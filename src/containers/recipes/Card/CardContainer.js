@@ -113,7 +113,7 @@ class MapRenderer extends Component {
   render = () => {
     const { recipe } = this.state;
     const { user } = this.props;
-    title = ['Kiran(kiru)  1/21/18 8:32AM', 'Ayushi(pihu)  1/21/18 8:32AM', 'Karan(kittu)  1/21/18 8:32AM']
+    title = ['kalicharanayan vishwanathan(kiru)', 'Ayushi(pihu)', 'Karan(kittu)']
     return (
       <MapRendererElement onPress={this.onPressCard} title={title} />
     );
