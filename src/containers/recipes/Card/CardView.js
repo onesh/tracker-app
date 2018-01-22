@@ -21,7 +21,7 @@ import { AppStyles } from '@theme/';
 // Components
 import { Card, Text } from '@ui/';
 import MapView from 'react-native-maps';
-
+let totalMaps = 0;
 
 /* Styles ==================================================================== */
 const style = StyleSheet.create({
@@ -31,7 +31,7 @@ const style = StyleSheet.create({
     right: 0,
   },
 mapHolderBody: {
-
+marginBottom: 20
 },
 mapCard: {
   paddingLeft: 15,
@@ -96,13 +96,14 @@ class Map extends Component {
   render = () => {
     const { title, onPress } = this.props;
     const count = title.length;
+    style.mapCard.height =  (100 / count).toString() + '%';
     const toRender = [];
 
     for (let i=0; i<count; i++) {
     toRender.push(
     <View style={style.mapCard}>
       <View>
-          <View style={[{flexDirection:'row', justifyContent: 'center'}]}>
+          <View style={[{flexDirection:'row', justifyContent: 'center', alignItems: 'center'}]}>
             <Text style={{marginLeft: 0}}>{title[i]}</Text>
             <Button
               onPress={this.onPressLearnMore}
@@ -122,9 +123,6 @@ class Map extends Component {
               />
 
           </MapView>
-    </View>
-    <View>
-         <Text>Last Updated at: '1/21/18'</Text>
     </View>
   </View>
 </View>
