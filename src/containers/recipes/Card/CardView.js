@@ -13,7 +13,7 @@ import {
   TouchableOpacity,
   Button
 } from 'react-native';
-import { Icon } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 // Consts and Libs
 import { AppStyles } from '@theme/';
@@ -46,7 +46,7 @@ mapCard: {
   elevation: 6,
   marginLeft: 5,
   marginRight: 5,
-  marginTop: 10,
+  marginTop: 30,
 }
 });
 
@@ -105,11 +105,7 @@ class Map extends Component {
       <View>
           <View style={[{flexDirection:'row', justifyContent: 'center', alignItems: 'center'}]}>
             <Text style={{marginLeft: 0}}>{title[i]}</Text>
-            <Button
-              onPress={this.onPressLearnMore}
-              title="Re-centre"
-              color="#841584"
-            />
+            <Icon name="refresh" size={30} color="#900" onPress={this.onPressLearnMore} />
           </View>
     <View style={style.mapHolderBody}>
             <MapView style={{height: 360 , width: 300, marginLeft: 10}}
