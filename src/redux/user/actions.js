@@ -1,6 +1,7 @@
 import { AsyncStorage } from 'react-native';
 import { ErrorMessages, Firebase, FirebaseRef } from '@constants/';
 import * as RecipeActions from '../recipes/actions';
+import { Actions } from 'react-native-router-flux';
 
 /**
   * Get Login Credentials from AsyncStorage
@@ -56,58 +57,36 @@ function getUserData(dispatch) {
   * Login to Firebase with Email/Password
   */
 export function login(formData = {}, verifyEmail = false) {
-  if (Firebase === null) {
-    return () => new Promise((resolve, reject) =>
-      reject({ message: ErrorMessages.invalidFirebase }));
-  }
-
   // Reassign variables for eslint ;)
-  let email = formData.Email || '';
+  let mobile = formData.Mobile || '';
   let password = formData.Password || '';
 
-  return async (dispatch) => {
     // When no credentials passed in, check AsyncStorage for existing details
-    if (!email || !password) {
-      const credsFromStorage = await getCredentialsFromStorage();
-      if (!email) email = credsFromStorage.email;
-      if (!password) password = credsFromStorage.password;
+    if (!mobile || !password) {
+      return () => new Promise((resolve, reject) =>
+        reject({ message: 'Please provide mobile and password both!' }));
     }
 
     // Update Login Creds in AsyncStorage
-    if (email && password) saveCredentialsToStorage(email, password);
+    if (mobile && password) {
 
-    // We're ready - let's try logging them in
-    return Firebase.auth()
-      .signInWithEmailAndPassword(email, password)
-      .then((res) => {
-        if (res && res.uid) {
-          // Update last logged in data
-          FirebaseRef.child(`users/${res.uid}`).update({
-            lastLoggedIn: Firebase.database.ServerValue.TIMESTAMP,
-          });
 
-          // Send verification Email - usually used on first login
-          if (verifyEmail) {
-            Firebase.auth().currentUser
-              .sendEmailVerification()
-              .catch(() => console.log('Verification email failed to send'));
-          }
+      return () =>  fetch('http://ec2-18-216-151-224.us-east-2.compute.amazonaws.com:8000/login',
+                   {
+                     method: 'POST',
+                     headers: {
+                     'Accept': 'application/json',
+                     'Content-Type': 'application/json',
+                     },
+                     body: JSON.stringify({
+                     username: mobile,
+                     password: password,
+                     })
+                 }).then(
 
-          // Get Favourites
-          RecipeActions.getFavourites(dispatch);
-
-          // Get User Data
-          getUserData(dispatch);
-        }
-
-        // Send to Redux
-        return dispatch({
-          type: 'USER_LOGIN',
-          data: res,
-        });
-      }).catch((err) => { throw err; });
-  };
-}
+                 ).catch((err)=>{throw err })
+  }
+};
 
 /**
   * Sign Up to Firebase

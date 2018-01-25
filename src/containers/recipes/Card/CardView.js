@@ -21,6 +21,8 @@ import { AppStyles } from '@theme/';
 // Components
 import { Card, Text } from '@ui/';
 import MapView from 'react-native-maps';
+import Toast from 'react-native-simple-toast';
+
 let totalMaps = 0;
 
 /* Styles ==================================================================== */
@@ -55,36 +57,33 @@ class Map extends Component {
   static componentName = 'Map';
   constructor() {
   super();
-  this.state = {
-    tone: {
-      latitude: 28.6315,
-      longitude: 77.2167,
-      latitudeDelta: 0.0922,
-      longitudeDelta: 0.0421,
-      lastUpdated: '1/21/18 8:32AM'
-    }
-  };
-}
+  this.rendered = false;
+};
+
 
   static propTypes = {
     title: PropTypes.array.isRequired,
     onPress: PropTypes.func,
   }
 
-  onPressLearnMore =  () => {
-    this.setState({
-      tone: {
-        latitude: 28.6315,
-        longitude: 77.2167,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-        lastUpdated: '1/21/18 8:32AM'
-      }
+  getMapsData() {
+    return   fetch('http://ec2-18-216-151-224.us-east-2.compute.amazonaws.com:8000/getTrackerData', {
+      method: 'POST',
+      headers: {
+          Accept: 'application/json',
+          }
     });
+  };
+
+  onPressLearnMore =  () => {
+    let mapsData = getMapsData();
+    let stateData = {};
+    for (let i = 0; i < mapsData.length; i++) stateData[i] = mapsData[i];
+    this.setState(stateData);
   }
 
   getDescription = () => {
-    return this.state.tone.lastUpdated;
+    return this.state[1].lastUpdated;
   }
 
   static defaultProps = {
@@ -94,8 +93,22 @@ class Map extends Component {
   }
 
   render = () => {
+    let mapsDataPromise = this.getMapsData();
+    this.mapKeys = [];
+    mapsDataPromise.then ((res) => {
+        this.mapKeys = Object.keys(res);
+        Toast.show('Data' + JSON.stringify(res._bodyInit));
+        Toast.show('This is a long toast.', Toast.LONG);
+        if (!this.rendered) {
+          this.setState(JSON.stringify(res._bodyInit));
+          this.rendered = true;
+        }
+    }).catch((err) => {throw err;
+      Toast.show('failed getting tracker data', Toast.LONG);
+    });
+
     const { title, onPress } = this.props;
-    const count = title.length;
+    const count = this.mapKeys.length;
     style.mapCard.height =  (100 / count).toString() + '%';
     const toRender = [];
 
@@ -105,17 +118,17 @@ class Map extends Component {
       <View>
           <View style={[{flexDirection:'row', justifyContent: 'center', alignItems: 'center'}]}>
             <Text style={{marginLeft: 0}}>{title[i]}</Text>
-            <Icon name="refresh" size={30} color="#900" onPress={this.onPressLearnMore} />
+            <Icon name="location-arrow" size={30} color="#900" onPress={this.onPressLearnMore} />
           </View>
     <View style={style.mapHolderBody}>
             <MapView style={{height: 360 , width: 300, marginLeft: 10}}
-            region={this.state.tone}
+            region={this.state[this.mapKeys[i]]}
             onRegionChange={this.onRegionChange}
           >
               <MapView.Marker
-                coordinate={this.state.tone}
+                coordinate={this.state[this.mapKeys[i]]}
                 title={'Last Updated At'}
-                description={this.state.tone.lastUpdated}
+                description={this.state[this.mapKeys[i]].date + ' ' + this.state[this.mapKeys[i]].time}
               />
 
           </MapView>

@@ -32,7 +32,7 @@ const scenes = (
       {...navbarPropsTabs}
       key={'tracker'}
       title={'trackers'}
-      icon={props => TabIcon({ ...props, icon: 'search' })}
+      icon={props => TabIcon({ ...props, icon: 'home' })}
     >
       <Scene
         {...navbarPropsTabs}
@@ -53,7 +53,7 @@ const scenes = (
       {...navbarPropsTabs}
       title={'All Trackers'}
       component={allTrackers}
-      icon={props => TabIcon({ ...props, icon: 'timeline' })}
+      icon={props => TabIcon({ ...props, icon: 'my-location' })}
     />
 
     <Scene
@@ -61,7 +61,7 @@ const scenes = (
       {...navbarPropsTabs}
       title={'Example Error'}
       component={Error}
-      icon={props => TabIcon({ ...props, icon: 'error' })}
+      icon={props => TabIcon({ ...props, icon: 'menu' })}
     />
   </Scene>
 );

@@ -39,6 +39,8 @@ class Authenticate extends Component {
         source={require('../../images/logo.png')}
         style={[styles.logo]}
       />
+
+    <Spacer size={30} />
       <View style={[AppStyles.row, AppStyles.paddingHorizontal]}>
         <View style={[AppStyles.flex1]}>
           <Button
@@ -52,6 +54,11 @@ class Authenticate extends Component {
 
       <Spacer size={10} />
 
+
+      <Text p style={[AppStyles.textCenterAligned, styles.whiteText]}>
+        - or -
+      </Text>
+
       <View style={[AppStyles.row, AppStyles.paddingHorizontal]}>
         <View style={[AppStyles.flex1]}>
           <Button
@@ -62,29 +69,6 @@ class Authenticate extends Component {
           />
         </View>
       </View>
-
-      <Spacer size={15} />
-
-      <Text p style={[AppStyles.textCenterAligned, styles.whiteText]}>
-        - or -
-      </Text>
-
-      <Spacer size={10} />
-
-      <View style={[AppStyles.row, AppStyles.paddingHorizontal]}>
-        <View style={[AppStyles.flex1]} />
-        <View style={[AppStyles.flex2]}>
-          <Button
-            small
-            title={'Skip'}
-            onPress={Actions.app}
-            raised={false}
-            backgroundColor={'rgba(255,255,255,0.2)'}
-          />
-        </View>
-        <View style={[AppStyles.flex1]} />
-      </View>
-
       <Spacer size={40} />
     </View>
   )

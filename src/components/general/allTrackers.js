@@ -35,6 +35,7 @@ const style = StyleSheet.create({
     marginLeft: 5,
     marginRight: 5,
     marginTop: 10,
+    backgroundColor: 'white'
   }
 })
 
@@ -51,8 +52,8 @@ constructor({text}) {
     centre : {
       latitude: 28.6315,
       longitude: 77.2167,
-      latitudeDelta: 0.0922,
-      longitudeDelta: 0.0421,
+      latitudeDelta: 0.02,
+      longitudeDelta: 0.02,
     }
   };
 
@@ -62,8 +63,8 @@ constructor({text}) {
       latlng: {
       latitude: 28.5315,
       longitude: 77.2167,
-      latitudeDelta: 0.0922,
-      longitudeDelta: 0.0421,
+      latitudeDelta: 0.02,
+      longitudeDelta: 0.02,
     },
     title: "Kiran's Last Location",
     name: 'Kiran'
@@ -72,8 +73,8 @@ constructor({text}) {
       latlng: {
         latitude: 28.5325,
         longitude: 77.1167,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
+        latitudeDelta: 0.02,
+        longitudeDelta: 0.02,
       },
       title: "Ayushi's Last Location",
       name: 'Ayushi'
@@ -82,8 +83,8 @@ constructor({text}) {
       latlng: {
       latitude: 28.5315,
       longitude: 77.2127,
-      latitudeDelta: 0.0922,
-      longitudeDelta: 0.0421,
+      latitudeDelta: 0.02,
+      longitudeDelta: 0.02,
     },
     title: "Karan's Last Location",
     name: 'Karan'
@@ -119,10 +120,10 @@ render = () => {
   for (let i=0; i<3; i++) {
   trackerRelocators.push(
     <View style={{marginLeft: 5}}>
-    <Button style={{flexDirection:'row', flexWrap:'wrap'}}
+    <Button style={{flexDirection:'row', flexWrap:'wrap',  backgroundColor: 'white'}}
     onPress={() => this.relocateMap(i)}
     title={this.getName(i)}
-    color="#841584"
+    color="#50B7EF"
   />
   </View>
 );
@@ -146,7 +147,7 @@ render = () => {
     </MapView>
   </View>
 
-  <View style={[AppStyles.containerCentered, AppStyles.container, {flexDirection:'row', flexWrap:'wrap'}]}>
+  <View style={[AppStyles.containerCentered, AppStyles.container, {flexDirection:'row', flexWrap:'wrap',  backgroundColor: 'white'}]}>
   {trackerRelocators}
   </View>
 

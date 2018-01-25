@@ -16,7 +16,7 @@ import FormRender from './FormView';
 const mapStateToProps = state => ({
   user: state.user,
   formType: 'login',
-  formFields: ['Email', 'Password'],
+  formFields: ['Mobile', 'Password'],
   buttonTitle: 'Login',
   successMessage: 'Awesome, you\'re now logged in',
 });

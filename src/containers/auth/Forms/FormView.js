@@ -29,7 +29,7 @@ class AuthForm extends Component {
 
   static propTypes = {
     user: PropTypes.shape({
-      email: PropTypes.string,
+      Mobile: PropTypes.number,
       firstName: PropTypes.string,
       lastName: PropTypes.string,
     }),
@@ -48,7 +48,7 @@ class AuthForm extends Component {
     submit: null,
     onSuccessfulSubmit: null,
     formType: 'login',
-    formFields: ['Email', 'Password'],
+    formFields: ['Mobile', 'Password'],
     buttonTitle: 'Login',
     successMessage: 'Awesome, you\'re now logged in',
     introTitle: null,
@@ -60,7 +60,7 @@ class AuthForm extends Component {
 
     // What fields should exist in the form?
     const formFields = {};
-    if (props.formFields.indexOf('Email') > -1) formFields.Email = this.validEmail;
+    if (props.formFields.indexOf('Mobile') > -1) formFields.Mobile = this.validMobile;
     if (props.formFields.indexOf('Password') > -1) formFields.Password = this.validPassword;
     if (props.formFields.indexOf('ConfirmPassword') > -1) formFields.ConfirmPassword = this.validPassword;
     if (props.formFields.indexOf('FirstName') > -1) formFields.FirstName = FormValidation.String;
@@ -76,7 +76,7 @@ class AuthForm extends Component {
       },
       form_fields: FormValidation.struct(formFields),
       form_values: {
-        Email: (props.user && props.user.email) ? props.user.email : '',
+        Mobile: (props.user && props.user.Mobile) ? props.user.Mobile : '',
         FirstName: (props.user && props.user.firstName) ? props.user.firstName : '',
         LastName: (props.user && props.user.lastName) ? props.user.lastName : '',
       },
@@ -84,7 +84,7 @@ class AuthForm extends Component {
         fields: {
           Email: {
             template: TcombTextInput,
-            error: 'Please enter a valid email',
+            error: 'Please enter a valid mobile number',
             autoCapitalize: 'none',
             clearButtonMode: 'while-editing',
             autoFocus: true,
@@ -130,11 +130,11 @@ class AuthForm extends Component {
     // Pre-populate any details stored in AsyncStorage
     const values = await this.getStoredCredentials();
 
-    if (values !== null && values.email && values.password) {
+    if (values !== null && values.Mobile && values.password) {
       this.setState({
         form_values: {
           ...this.state.form_values,
-          Email: values.email || '',
+          Email: values.Mobile || '',
           Password: values.password || '',
         },
       });
@@ -156,11 +156,9 @@ class AuthForm extends Component {
   /**
     * Email Validation
     */
-  validEmail = FormValidation.refinement(
-    FormValidation.String, (email) => {
-      const regularExpression = /^.+@.+\..+$/i;
-
-      return regularExpression.test(email);
+  validMobile = FormValidation.refinement(
+    FormValidation.String, (Mobile) => {
+      return true;
     },
   );
 
