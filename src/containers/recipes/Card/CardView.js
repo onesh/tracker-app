@@ -8,6 +8,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
+  ActivityIndicator,
   View,
   StyleSheet,
   TouchableOpacity,
@@ -57,7 +58,7 @@ class Map extends Component {
   static componentName = 'Map';
   constructor() {
   super();
-  this.rendered = false;
+  this.hasData = false;
 };
 
 
@@ -76,10 +77,16 @@ class Map extends Component {
   };
 
   onPressLearnMore =  () => {
-    let mapsData = getMapsData();
-    let stateData = {};
-    for (let i = 0; i < mapsData.length; i++) stateData[i] = mapsData[i];
-    this.setState(stateData);
+    // let mapsDataPromise = this.getMapsData();
+    // let that = this;
+    // mapsDataPromise.then ((res) => {
+    //   let mapData = JSON.parse(res._bodyInit);
+    //     that.hasData = false;
+    //     that.setState(mapData);
+    //   }).catch((err) => {throw err;
+    //     Toast.show('failed getting tracker data', Toast.LONG);
+    //   });
+ this.forceUpdate();
   }
 
   getDescription = () => {
@@ -93,58 +100,71 @@ class Map extends Component {
   }
 
   render = () => {
-    let mapsDataPromise = this.getMapsData();
-    this.mapKeys = [];
-    mapsDataPromise.then ((res) => {
-        this.mapKeys = Object.keys(res);
-        Toast.show('Data' + JSON.stringify(res._bodyInit));
-        Toast.show('This is a long toast.', Toast.LONG);
-        if (!this.rendered) {
-          this.setState(JSON.stringify(res._bodyInit));
-          this.rendered = true;
-        }
+  let toRender = [];
+  if (this.hasData) {
+
+      for (let i=0; i<this.mapKeys.length; i++) {
+
+        if (!this.state[this.mapKeys[i]].latitudeDelta) this.state[this.mapKeys[i]].latitudeDelta = 0.2;
+        if (!this.state[this.mapKeys[i]].longitudeDelta) this.state[this.mapKeys[i]].longitudeDelta = 0.2;
+
+      toRender.push(
+      <View style={style.mapCard}>
+        <View>
+            <View style={[{flexDirection:'row', justifyContent: 'center', alignItems: 'center'}]}>
+              <Text style={{marginLeft: 0}}>{this.state[this.mapKeys[i]].id}</Text>
+              <Icon name="location-arrow" size={30} color="#900" onPress={() => this.onPressLearnMore(i)} />
+            </View>
+      <View style={style.mapHolderBody}>
+              <MapView style={{height: 360 , width: 300, marginLeft: 10}}
+              region={this.state[this.mapKeys[i]]}
+              onRegionChange={this.onRegionChange}
+            >
+                <MapView.Marker
+                  coordinate={this.state[this.mapKeys[i]]}
+                  title={'Last Updated At'}
+                  description={this.state[this.mapKeys[i]].date}
+                />
+
+            </MapView>
+      </View>
+    </View>
+  </View>
+        );
+    }
+  return (
+  <View style={{backgroundColor: 'white'}}>
+    {toRender}
+    </View>
+);
+
+} else {
+  let mapsDataPromise = this.getMapsData();
+  this.mapKeys = [];
+  let that = this;
+  let { title, onPress } = this.props;
+  let count  = this.mapKeys.length;
+  style.mapCard.height =  (100 / count).toString() + '%';
+
+
+  mapsDataPromise.then ((res) => {
+    let mapData = JSON.parse(res._bodyInit);
+      that.mapKeys = Object.keys(mapData);
+      that.setState(mapData);
+      this.hasData = true;
     }).catch((err) => {throw err;
       Toast.show('failed getting tracker data', Toast.LONG);
     });
-
-    const { title, onPress } = this.props;
-    const count = this.mapKeys.length;
-    style.mapCard.height =  (100 / count).toString() + '%';
-    const toRender = [];
-
-    for (let i=0; i<count; i++) {
-    toRender.push(
-    <View style={style.mapCard}>
-      <View>
-          <View style={[{flexDirection:'row', justifyContent: 'center', alignItems: 'center'}]}>
-            <Text style={{marginLeft: 0}}>{title[i]}</Text>
-            <Icon name="location-arrow" size={30} color="#900" onPress={this.onPressLearnMore} />
-          </View>
-    <View style={style.mapHolderBody}>
-            <MapView style={{height: 360 , width: 300, marginLeft: 10}}
-            region={this.state[this.mapKeys[i]]}
-            onRegionChange={this.onRegionChange}
-          >
-              <MapView.Marker
-                coordinate={this.state[this.mapKeys[i]]}
-                title={'Last Updated At'}
-                description={this.state[this.mapKeys[i]].date + ' ' + this.state[this.mapKeys[i]].time}
-              />
-
-          </MapView>
-    </View>
-  </View>
-</View>
-
-
-      );
-  }
-
     return (
-      <View style={{backgroundColor: 'white'}}>
-      {toRender}
+      <View style={[style.container,  {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10
+  }]}>
+      <ActivityIndicator  animating={!this.hasData} size="large" color="#0000ff" />
       </View>
-    );
+      );
+    }
   }
 }
 

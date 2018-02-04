@@ -56,43 +56,21 @@ constructor({text}) {
       longitudeDelta: 0.02,
     }
   };
+  allmapDataPromise = this.getMapsData();
+  allmapDataPromise.then((res) => {this.state.markers = JSON.parse(res._bodyInit); this.forceUpdate()})
+                   .catch((err) => {});
 
-
-  this.state.markers = [
-    {
-      latlng: {
-      latitude: 28.5315,
-      longitude: 77.2167,
-      latitudeDelta: 0.02,
-      longitudeDelta: 0.02,
-    },
-    title: "Kiran's Last Location",
-    name: 'Kiran'
-  },
-    {
-      latlng: {
-        latitude: 28.5325,
-        longitude: 77.1167,
-        latitudeDelta: 0.02,
-        longitudeDelta: 0.02,
-      },
-      title: "Ayushi's Last Location",
-      name: 'Ayushi'
-    },
-    {
-      latlng: {
-      latitude: 28.5315,
-      longitude: 77.2127,
-      latitudeDelta: 0.02,
-      longitudeDelta: 0.02,
-    },
-    title: "Karan's Last Location",
-    name: 'Karan'
-  }
-  ]
 
 }
 
+getMapsData() {
+  return   fetch('http://ec2-18-216-151-224.us-east-2.compute.amazonaws.com:8000/getTrackerData', {
+    method: 'POST',
+    headers: {
+        Accept: 'application/json',
+        }
+  });
+};
 
 onRegionChange = () => {
 
@@ -105,24 +83,31 @@ static componentName = 'allTrackers';
 
 relocateMap = (i) => {
   let that = this;
-  if ( that.state.markers[i].latlng) {
+  if ( that.state.markers[i].id) {
     this.setState({
-      centre: that.state.markers[i].latlng
+      centre: {latitude: that.state.markers[i].latitude,
+        longitude: that.state.markers[i].longitude,
+        latitudeDelta: 0.02,
+        longitudeDelta: 0.02,
+      }
     });
   }
 }
 getName = (i) => {
-  if (this.state.markers[i].name) return this.state.markers[i].name;
+  if (this.state.markers[i].id) return this.state.markers[i].id;
+  else return ""
 }
 render = () => {
 
   const trackerRelocators = [];
-  for (let i=0; i<3; i++) {
+  const keys = Object.keys(!this.state.markers ? {} : this.state.markers);
+  let that = this;
+  for (let i=0; i<keys.length; i++) {
   trackerRelocators.push(
     <View style={{marginLeft: 5}}>
     <Button style={{flexDirection:'row', flexWrap:'wrap',  backgroundColor: 'white'}}
-    onPress={() => this.relocateMap(i)}
-    title={this.getName(i)}
+    onPress={() => this.relocateMap(keys[i])}
+    title={this.getName(keys[i])}
     color="#50B7EF"
   />
   </View>
@@ -138,12 +123,22 @@ render = () => {
         region={this.state.centre}
 
           onRegionChange={this.onRegionChange}>
-          {this.state.markers.map(marker => (
-          <MapView.Marker
-            coordinate={marker.latlng}
-            title={marker.title}
-          />
-        ))}
+          {
+            (function (){
+              let localMarkers = [];
+              for (let ctr =0; ctr < keys.length ; ctr ++) {
+                localMarkers.push(<MapView.Marker
+                  coordinate={{latitude: that.state.markers[keys[ctr]].latitude,
+                               longitude: that.state.markers[keys[ctr]].longitude,
+                               latitudeDelta: 0.02,
+                               longitudeDelta: 0.02,
+                             }}
+                  title={keys[ctr]}
+                />)
+              }
+              return localMarkers;
+            })()
+          }
     </MapView>
   </View>
 
