@@ -76,17 +76,9 @@ class Map extends Component {
     });
   };
 
-  onPressLearnMore =  () => {
-    // let mapsDataPromise = this.getMapsData();
-    // let that = this;
-    // mapsDataPromise.then ((res) => {
-    //   let mapData = JSON.parse(res._bodyInit);
-    //     that.hasData = false;
-    //     that.setState(mapData);
-    //   }).catch((err) => {throw err;
-    //     Toast.show('failed getting tracker data', Toast.LONG);
-    //   });
- this.forceUpdate();
+  onPressLearnMore =  (i) => {
+      this.hasData = false;
+      this.forceUpdate();
   }
 
   getDescription = () => {
@@ -133,9 +125,11 @@ class Map extends Component {
         );
     }
   return (
-  <View style={{backgroundColor: 'white'}}>
+<View style={{backgroundColor: 'white'}}>
+  <View>
     {toRender}
-    </View>
+  </View>
+</View>
 );
 
 } else {
@@ -161,7 +155,7 @@ class Map extends Component {
     justifyContent: 'space-around',
     padding: 10
   }]}>
-      <ActivityIndicator  animating={!this.hasData} size="large" color="#0000ff" />
+      <ActivityIndicator  style={{paddingTop: '50%'}} animating={!this.hasData} size="large" color="#0000ff" />
       </View>
       );
     }

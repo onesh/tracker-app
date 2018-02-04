@@ -82,7 +82,7 @@ class AuthForm extends Component {
       },
       options: {
         fields: {
-          Email: {
+          Mobile: {
             template: TcombTextInput,
             error: 'Please enter a valid mobile number',
             autoCapitalize: 'none',
