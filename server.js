@@ -1,28 +1,29 @@
-const server = require('tk102');
-const firebaseCreds = require('./firebase-creds.json');
-const firebaseAdmin = require('firebase-admin');
+const net = require('net');
+const dataProcessor = require('./dataProcessor');
+const api = require('./api');
 
-firebaseAdmin.initializeApp({
-  credential: firebaseAdmin.credential.cert(firebaseCreds),
-  databaseURL: 'https://trackerapp95.firebaseio.com'
-});
-// start server
-server.createServer({
-  port: 9000
+
+const server = net.createServer((socket)=> {
+
+if (socket)  console.log('  ====>  Incoming Tracker Request....');
+
 });
 
-console.log('Server started on port 9000');
 
-// incoming data, i.e. update a map
-server.on('data', function(raw) {
-  console.log('Incoming data: ' + raw);
+server.on('listening', (data)=> {
+console.log('server listening on port', server.address().port, ' and IP ', server.address().address);
 });
 
-const deviceId = '133';
-const lat = '62.93';
-const lon = '43.49';
-const db = firebaseAdmin.database();
-db.ref('/Location/' + deviceId).set({
-  lat,
-  lon
+
+server.on('error', (err) => {
+    console.log('error occurred  =====>  ', err);
 });
+
+server.on('connection', (socket)=> {
+	socket.on('data', (data)=>{
+	dataProcessor.translator(data);
+	});
+
+});
+
+server.listen(9000, '172.31.39.132');
