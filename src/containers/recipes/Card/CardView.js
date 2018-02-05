@@ -80,7 +80,9 @@ class Map extends Component {
       this.hasData = false;
       this.forceUpdate();
   }
-
+  relocateToMarker() {
+    this.forceUpdate();
+  }
   getDescription = () => {
     return this.state[1].lastUpdated;
   }
@@ -101,11 +103,10 @@ class Map extends Component {
         if (!this.state[this.mapKeys[i]].longitudeDelta) this.state[this.mapKeys[i]].longitudeDelta = 0.2;
 
       toRender.push(
-      <View style={style.mapCard}>
+      <View style={style.mapCard} key={this.state[this.mapKeys[i]].id}>
         <View>
             <View style={[{flexDirection:'row', justifyContent: 'center', alignItems: 'center'}]}>
-              <Text style={{marginLeft: 0}}>{this.state[this.mapKeys[i]].id}</Text>
-              <Icon name="location-arrow" size={30} color="#900" onPress={() => this.onPressLearnMore(i)} />
+              <Text style={{marginLeft: 0, fontFamily: 'monospace'}}>Device Name: <Text style={{color: 'blue'}}>{this.state[this.mapKeys[i]].id}</Text></Text>
             </View>
       <View style={style.mapHolderBody}>
               <MapView style={{height: 360 , width: 300, marginLeft: 10}}
@@ -115,10 +116,18 @@ class Map extends Component {
                 <MapView.Marker
                   coordinate={this.state[this.mapKeys[i]]}
                   title={'Last Updated At'}
-                  description={this.state[this.mapKeys[i]].date}
-                />
 
+                  description={this.state[this.mapKeys[i]].date  + ' at ' +  this.state[this.mapKeys[i]].time}
+                />
             </MapView>
+      </View>
+
+      <View style={[{flexDirection:'row', justifyContent: 'center', alignItems: 'center'}]}>
+        <Text style={{marginLeft: 0, fontFamily: 'monospace'}}>Battery Status: <Text style={{color: 'blue'}}>{this.state[this.mapKeys[i]].battery}%</Text></Text>
+        <Text>&nbsp;&nbsp;&nbsp;&nbsp;</Text>
+        <Icon style={{paddingBottom: 5}} name="location-arrow" size={30} color="#900" onPress={() => this.onPressLearnMore(i)} />
+        <Text>&nbsp;&nbsp;</Text>
+        <Icon style={{paddingBottom: 5}} name="refresh" size={30} color="#900" onPress={() => this.relocateToMarker()} />
       </View>
     </View>
   </View>

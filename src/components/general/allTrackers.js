@@ -104,7 +104,7 @@ render = () => {
   let that = this;
   for (let i=0; i<keys.length; i++) {
   trackerRelocators.push(
-    <View style={{marginLeft: 5}}>
+    <View style={{marginLeft: 5}} key={i}>
     <Button style={{flexDirection:'row', flexWrap:'wrap',  backgroundColor: 'white'}}
     onPress={() => this.relocateMap(keys[i])}
     title={this.getName(keys[i])}
@@ -133,6 +133,7 @@ render = () => {
                                latitudeDelta: 0.02,
                                longitudeDelta: 0.02,
                              }}
+                  key={that.state.markers[keys[ctr]].id}
                   title={keys[ctr]}
                 />)
               }
