@@ -48,11 +48,13 @@ class dataProcessor {
 	
 	googleMapsClient.geolocate(postData, function(err, data) {
           if (!err) {
+       	var date = new Date();
+	var UTCmilliseconds = date.valueOf() + date.getTimezoneOffset() * 60000 + 330 * 60000
             ping = {
 		id:  trackarData[1],
 		latitude: cleanlatlong(data.json.location.lat),
 	        longitude:  cleanlatlong(data.json.location.lat),
-		datetime: new Date().toLocaleString(),
+		datetime: new Date(UTCmilliseconds).toLocaleString(),
 		battery: Math.floor((Number(trackerData[length - 1].charAt(0)) / 6 ) * 100),
 		latitudeDelta: 0.02,
                 longitudeDelta: 0.02,
@@ -77,11 +79,14 @@ class dataProcessor {
 		decimal = (decimal * 100) / 60
 		return Math.floor(value) + decimal;
 	}
+		var date = new Date();
+		var UTCmilliseconds = date.valueOf() + date.getTimezoneOffset() * 60000 + 330 * 60000
+           
 		let ping = {
  		    id: trackerData[1],
 		    latitude:  cleanlatlong(trackerData[5]/100),
 		    longitude: cleanlatlong(trackerData[7]/100),
-		    datetime: new Date().toLocaleString(),
+		    datetime: new Date(UTCmilliseconds).toLocaleString(),
 		    battery: Math.floor((Number(trackerData[17].charAt(0)) / 6 ) * 100),
 		    latitudeDelta: 0.02,
                     longitudeDelta: 0.02,
