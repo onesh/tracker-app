@@ -117,7 +117,7 @@ class Map extends Component {
                   coordinate={this.state[this.mapKeys[i]]}
                   title={'Last Updated At'}
 
-                  description={this.state[this.mapKeys[i]].date  + ' at ' +  this.state[this.mapKeys[i]].time}
+                  description={this.state[this.mapKeys[i]].datetime}
                 />
             </MapView>
       </View>
@@ -125,9 +125,9 @@ class Map extends Component {
       <View style={[{flexDirection:'row', justifyContent: 'center', alignItems: 'center'}]}>
         <Text style={{marginLeft: 0, fontFamily: 'monospace'}}>Battery Status: <Text style={{color: 'blue'}}>{this.state[this.mapKeys[i]].battery}%</Text></Text>
         <Text>&nbsp;&nbsp;&nbsp;&nbsp;</Text>
-        <Icon style={{paddingBottom: 5}} name="location-arrow" size={30} color="#900" onPress={() => this.onPressLearnMore(i)} />
+        <Icon style={{paddingBottom: 5}} name="location-arrow" size={26} color ='#5FC2EA' onPress={() => this.onPressLearnMore(i)} />
         <Text>&nbsp;&nbsp;</Text>
-        <Icon style={{paddingBottom: 5}} name="refresh" size={30} color="#900" onPress={() => this.relocateToMarker()} />
+        <Icon style={{paddingBottom: 5}} name="refresh" size={26} color = '#5FC2EA' onPress={() => this.relocateToMarker()} />
       </View>
     </View>
   </View>
