@@ -27,12 +27,11 @@ const navbarPropsTabs = {
 
 /* Routes ==================================================================== */
 const scenes = (
-  <Scene key={'tabBar'} tabs tabBarIconContainerStyle={AppStyles.tabbar} pressOpacity={0.95}>
+  <Scene key={'tabBar'} pressOpacity={0.95}>
     <Scene
       {...navbarPropsTabs}
       key={'tracker'}
       title={'trackers'}
-      icon={props => TabIcon({ ...props, icon: 'home' })}
     >
       <Scene
         {...navbarPropsTabs}
@@ -49,20 +48,12 @@ const scenes = (
     </Scene>
 
     <Scene
-      key={'timeline'}
+      key={'trackerMap'}
       {...navbarPropsTabs}
-      title={'All Trackers'}
       component={allTrackers}
-      icon={props => TabIcon({ ...props, icon: 'my-location' })}
     />
 
-    <Scene
-      key={'error'}
-      {...navbarPropsTabs}
-      title={'Example Error'}
-      component={Error}
-      icon={props => TabIcon({ ...props, icon: 'menu' })}
-    />
+
   </Scene>
 );
 

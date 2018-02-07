@@ -1,5 +1,5 @@
 const app = {
-  background: '#E9EBEE',
+  background: 'white',
   cardBackground: '#FFFFFF',
   listItemBackground: '#FFFFFF',
 };

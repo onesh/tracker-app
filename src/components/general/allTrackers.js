@@ -11,12 +11,21 @@ import PropTypes from 'prop-types';
 import {
   View,
   StyleSheet,
-  Button
+  TouchableOpacity,
+  TouchableHighlight
  } from 'react-native';
+ import { Button } from 'react-native-elements'
 
 // Consts and Libs
 import { AppStyles } from '@theme/';
+import Sizes from '@theme/sizes';
+import { Actions } from 'react-native-router-flux';
+
+
 import MapView from 'react-native-maps';
+import { Marker } from 'react-native-maps';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 
 // Components
 import { Text } from '@ui/';
@@ -31,11 +40,10 @@ const style = StyleSheet.create({
     shadowOffset: { width: 5, height: 2 },
     shadowOpacity: 0.4,
     shadowRadius: 5,
-    elevation: 6,
-    marginLeft: 5,
-    marginRight: 5,
-    marginTop: 10,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    zIndex: 5,
+    top: 0,
+    position: 'absolute'
   }
 })
 
@@ -76,75 +84,47 @@ onRegionChange = () => {
 
 }
 
-static propTypes = { text: PropTypes.string };
-static defaultProps = { text: 'All Trackers' };
+static defaultProps = { device: {} };
 static componentName = 'allTrackers';
 
-
-relocateMap = (i) => {
-  let that = this;
-  if ( that.state.markers[i].id) {
-    this.setState({
-      centre: {latitude: that.state.markers[i].latitude,
-        longitude: that.state.markers[i].longitude,
-        latitudeDelta: 0.02,
-        longitudeDelta: 0.02,
-      }
-    });
-  }
-}
 getName = (i) => {
   if (this.state.markers[i].id) return this.state.markers[i].id;
   else return ""
 }
 render = () => {
-
-  const trackerRelocators = [];
-  const keys = Object.keys(!this.state.markers ? {} : this.state.markers);
-  let that = this;
-  for (let i=0; i<keys.length; i++) {
-  trackerRelocators.push(
-    <View style={{marginLeft: 5}} key={i}>
-    <Button style={{flexDirection:'row', flexWrap:'wrap',  backgroundColor: 'white'}}
-    onPress={() => this.relocateMap(keys[i])}
-    title={this.getName(keys[i])}
-    color="#50B7EF"
-  />
-  </View>
-);
-}
-
-
+var that = this;
   return (
-  <View style={[AppStyles.container, AppStyles.containerCentered, style.mapCard]}>
-
-  <View>
-    <MapView style={{height: 420 , width: 440}}
-        region={this.state.centre}
-
-          onRegionChange={this.onRegionChange}>
-          {
-            (function (){
-              let localMarkers = [];
-              for (let ctr =0; ctr < keys.length ; ctr ++) {
-                localMarkers.push(<MapView.Marker
-                  coordinate={{latitude: that.state.markers[keys[ctr]].latitude,
-                               longitude: that.state.markers[keys[ctr]].longitude,
-                               latitudeDelta: 0.02,
-                               longitudeDelta: 0.02,
-                             }}
-                  key={that.state.markers[keys[ctr]].id}
-                  title={keys[ctr]}
-                />)
-              }
-              return localMarkers;
-            })()
-          }
-    </MapView>
+<View>
+  <View style={{position: 'absolute', top: 50, left: 30, zIndex: 6}}>
+  <TouchableOpacity activeOpacity={0.2} onPress={()=> Actions.pop()}>
+      <Icon name='chevron-left' size={30} />
+  </TouchableOpacity>
   </View>
+  <View style={[AppStyles.container, AppStyles.containerCentered, style.mapCard]}>
+      <View>
+        <MapView style={{height: Sizes.screen.height,
+                         width: Sizes.screen.width,
+                         zIndex: 3}}
+            region={{
+                      latitude: that.props.device['latitude'],
+                      longitude: that.props.device['longitude'],
+                      longitudeDelta: 0.02,
+                      latitudeDelta: 0.02
+                  }}
 
-  <View style={[AppStyles.containerCentered, AppStyles.container, {flexDirection:'row', flexWrap:'wrap',  backgroundColor: 'white'}]}>
-  {trackerRelocators}
+              onRegionChange={this.onRegionChange}>
+
+              <Marker
+                coordinate={{
+                          latitude: that.props.device['latitude'],
+                          longitude: that.props.device['longitude'],
+                          longitudeDelta: 0.2,
+                          latitudeDelta: 0.2
+                      }}
+                title={that.props.device['datetime']}
+    />
+        </MapView>
+    </View>
   </View>
 
   </View>

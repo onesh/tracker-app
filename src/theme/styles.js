@@ -10,8 +10,6 @@ export default {
   // Default
   container: {
     position: 'relative',
-    flex: 1,
-    flexDirection: 'column',
     backgroundColor: Colors.background,
   },
   containerCentered: {
@@ -215,8 +213,9 @@ export default {
 
   // Navbar
   navbar: {
-    backgroundColor: Colors.brand.primary,
+    backgroundColor: 'white',
     borderBottomWidth: 0,
+    opacity: 0
   },
   navbarTitle: {
     color: '#ffffff',
@@ -233,5 +232,6 @@ export default {
     backgroundColor: Colors.tabbar.background,
     borderTopColor: Colors.border,
     borderTopWidth: 1,
+    height: 0
   },
 };

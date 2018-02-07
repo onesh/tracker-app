@@ -18,6 +18,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 // Consts and Libs
 import { AppStyles } from '@theme/';
+import { Actions } from 'react-native-router-flux';
 
 // Components
 import { Card, Text } from '@ui/';
@@ -28,28 +29,22 @@ let totalMaps = 0;
 
 /* Styles ==================================================================== */
 const style = StyleSheet.create({
-  favourite: {
-    position: 'absolute',
-    top: -45,
-    right: 0,
-  },
-mapHolderBody: {
-marginBottom: 20
-},
+
 mapCard: {
   paddingLeft: 15,
-  paddingTop: 25,
-  borderWidth: 0,
-  borderRadius: 0,
+  paddingRight: 15,
+  paddingTop: 20,
+  paddingBottom: 20,
   borderColor: 'gray',
-  shadowColor: 'gray',
-  shadowOffset: { width: 5, height: 2 },
   shadowOpacity: 0.4,
-  shadowRadius: 5,
-  elevation: 6,
+  elevation: 3,
+  shadowRadius: 2,
   marginLeft: 5,
   marginRight: 5,
-  marginTop: 30,
+  marginTop: 15,
+  backgroundColor: 'white',
+  shadowOffset:{  width: 2,  height: 2 },
+  shadowColor: 'black',
 }
 });
 
@@ -76,6 +71,56 @@ class Map extends Component {
     });
   };
 
+  toggleCardVisibility  = (card) => {
+    card.showDetailCard = !card.showDetailCard;
+    this.forceUpdate();
+  };
+  showCard(card, i) {
+
+    var that = this;
+    if (card.showDetailCard) {
+       return (
+      <View style={[style.mapCard, {flexDirection:'row', flexWrap:'wrap', marginTop: 5}]} key={this.state[this.mapKeys[i]].id}>
+        <View style={{flexDirection:'row', flexWrap:'wrap'}}>
+            <Icon  name="map-marker" size={25} />
+            <Text>&nbsp;&nbsp;&nbsp;&nbsp;</Text>
+            <Text style={{paddingTop: 5}}>Saraswati vidya mandir</Text>
+            <Text>{'\n'}{'\n'}</Text>
+        </View>
+
+        <View style={{flexDirection:'row', flexWrap:'wrap'}}>
+            <Icon name="location-arrow" size={25} />
+            <Text>&nbsp;&nbsp;&nbsp;&nbsp;</Text>
+            <Text style={{paddingTop: 5}}>{this.state[this.mapKeys[i]].latitude + ',' + this.state[this.mapKeys[i]].longitude}</Text>
+            <Text>{'\n'}{'\n'}{'\n'}{'\n'}{'\n'}</Text>
+        </View>
+
+
+        <View style={{flexDirection:'row', flexWrap:'wrap'}}>
+            <View style={{width: '50%'}}>
+              <Button
+                  onPress={()=>{Actions.trackerMap({device: card})}}
+                  title="GEO-FENSING"
+                  color="black"
+                  accessibilityLabel="Geo-Fence the tracker"
+              />
+            </View>
+
+            <View style={{width: '30%'}}></View>
+
+            <View style={{width: '20%'}}>
+              <Button
+                  onPress={()=>{}}
+                  title="EDIT"
+                  color="black"
+              />
+            </View>
+
+        </View>
+     </View>
+    );
+  } else return (<Text></Text>)
+}
   onPressLearnMore =  (i) => {
       this.hasData = false;
       this.forceUpdate();
@@ -101,40 +146,27 @@ class Map extends Component {
 
         if (!this.state[this.mapKeys[i]].latitudeDelta) this.state[this.mapKeys[i]].latitudeDelta = 0.2;
         if (!this.state[this.mapKeys[i]].longitudeDelta) this.state[this.mapKeys[i]].longitudeDelta = 0.2;
-
+        if (!this.state[this.mapKeys[i]].showDetailCard) this.state[this.mapKeys[i]].showDetailCard = false;
       toRender.push(
-      <View style={style.mapCard} key={this.state[this.mapKeys[i]].id}>
-        <View>
-            <View style={[{flexDirection:'row', justifyContent: 'center', alignItems: 'center'}]}>
-              <Text style={{marginLeft: 0, fontFamily: 'monospace'}}>Device Name: <Text style={{color: 'blue'}}>{this.state[this.mapKeys[i]].id}</Text></Text>
-            </View>
-      <View style={style.mapHolderBody}>
-              <MapView style={{height: 360 , width: 300, marginLeft: 10}}
-              region={this.state[this.mapKeys[i]]}
-              onRegionChange={this.onRegionChange}
-            >
-                <MapView.Marker
-                  coordinate={this.state[this.mapKeys[i]]}
-                  title={'Last Updated At'}
-
-                  description={this.state[this.mapKeys[i]].datetime}
-                />
-            </MapView>
-      </View>
-
-      <View style={[{flexDirection:'row', justifyContent: 'center', alignItems: 'center'}]}>
-        <Text style={{marginLeft: 0, fontFamily: 'monospace'}}>Battery Status: <Text style={{color: 'blue'}}>{this.state[this.mapKeys[i]].battery}%</Text></Text>
-        <Text>&nbsp;&nbsp;&nbsp;&nbsp;</Text>
-        <Icon style={{paddingBottom: 5}} name="location-arrow" size={26} color ='#5FC2EA' onPress={() => this.onPressLearnMore(i)} />
-        <Text>&nbsp;&nbsp;</Text>
-        <Icon style={{paddingBottom: 5}} name="refresh" size={26} color = '#5FC2EA' onPress={() => this.relocateToMarker()} />
-      </View>
+<View key={this.state[this.mapKeys[i]].id}>
+    <TouchableOpacity activeOpacity={0.8} style={[style.mapCard, {flex: 1, flexDirection: 'row', justifyContent: 'space-between'}]} onPress= {() => this.toggleCardVisibility(this.state[this.mapKeys[i]])} key={this.state[this.mapKeys[i]].id}>
+      <View style={{flexDirection:'row', flexWrap:'wrap'}} >
+        <Icon name="warning" size={35}  />
+            <Text>&nbsp;&nbsp;&nbsp;&nbsp;</Text>
+              <Text style={{ flexDirection:'row', flexWrap:'wrap', fontSize: 20}}>{this.state[this.mapKeys[i]].id}({'Vansh'}) {'\n'}{'\n'}<Text>
+                 Last Update: {this.state[this.mapKeys[i]].datetime}</Text>
+                  <Text>{'\n'}{'\n'}</Text><Text>Battery Status: <Text>{this.state[this.mapKeys[i]].battery}%</Text></Text>
+              </Text>
+            <Text>&nbsp;&nbsp;&nbsp;&nbsp;</Text>
+          <Icon  name="map" size={35} onPress={() => this.relocateToMarker()} />
     </View>
+  </TouchableOpacity>
+  <View>{this.showCard(this.state[this.mapKeys[i]], i)}</View>
   </View>
-        );
-    }
+  );
+}
   return (
-<View style={{backgroundColor: 'white'}}>
+<View>
   <View>
     {toRender}
   </View>
