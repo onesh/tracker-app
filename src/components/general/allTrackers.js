@@ -95,10 +95,26 @@ render = () => {
 var that = this;
   return (
 <View>
+
   <View style={{position: 'absolute', top: 50, left: 30, zIndex: 6}}>
-  <TouchableOpacity activeOpacity={0.2} onPress={()=> Actions.pop()}>
-      <Icon name='chevron-left' size={30} />
-  </TouchableOpacity>
+    <TouchableOpacity activeOpacity={0.2} onPress={()=> Actions.pop()}>
+        <Icon name='chevron-left' size={30} />
+    </TouchableOpacity>
+  </View>
+  <View style={{position: 'absolute', top: (Sizes.screen.height - 120), left: (Sizes.screen.width / 6), zIndex: 6, flex: 1, justifyContent: 'center', flexDirection: 'row'}}>
+
+      <TouchableOpacity  activeOpacity={0.2} onPress={()=> Actions.pop()}>
+          <Icon  name='history' size={50} />
+      </TouchableOpacity>
+
+      <TouchableOpacity style={{marginLeft: (Sizes.screen.width / 5)}} activeOpacity={0.2} onPress={()=> Actions.pop()}>
+          <Icon  name='map-marker' size={50} />
+      </TouchableOpacity>
+
+      <TouchableOpacity style={{marginLeft: (Sizes.screen.width / 5)}} activeOpacity={0.2} onPress={()=> this.forceUpdate()}>
+      <Icon  name='thumb-tack' size={50} />
+      </TouchableOpacity>
+
   </View>
   <View style={[AppStyles.container, AppStyles.containerCentered, style.mapCard]}>
       <View>

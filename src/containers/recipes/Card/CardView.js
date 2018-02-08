@@ -80,7 +80,7 @@ class Map extends Component {
     var that = this;
     if (card.showDetailCard) {
        return (
-      <View style={[style.mapCard, {flexDirection:'row', flexWrap:'wrap', marginTop: 5}]} key={this.state[this.mapKeys[i]].id}>
+      <View style={[style.mapCard, {flexDirection:'row', flexWrap:'wrap', marginTop: 0}]} key={this.state[this.mapKeys[i]].id}>
         <View style={{flexDirection:'row', flexWrap:'wrap'}}>
             <Icon  name="map-marker" size={25} />
             <Text>&nbsp;&nbsp;&nbsp;&nbsp;</Text>
