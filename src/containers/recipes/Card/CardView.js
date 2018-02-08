@@ -99,7 +99,7 @@ class Map extends Component {
         <View style={{flexDirection:'row', flexWrap:'wrap'}}>
             <View style={{width: '50%'}}>
               <Button
-                  onPress={()=>{Actions.trackerMap({device: card})}}
+                  onPress={() => {}}
                   title="GEO-FENSING"
                   color="black"
                   accessibilityLabel="Geo-Fence the tracker"
@@ -140,6 +140,7 @@ class Map extends Component {
 
   render = () => {
   let toRender = [];
+  let that = this;
   if (this.hasData) {
 
       for (let i=0; i<this.mapKeys.length; i++) {
@@ -158,7 +159,9 @@ class Map extends Component {
                   <Text>{'\n'}{'\n'}</Text><Text>Battery Status: <Text>{this.state[this.mapKeys[i]].battery}%</Text></Text>
               </Text>
             <Text>&nbsp;&nbsp;&nbsp;&nbsp;</Text>
-          <Icon  name="map" size={35} onPress={() => this.relocateToMarker()} />
+          <TouchableOpacity activeOpacity={0.2} onPress={() => Actions.trackerMap({device: that.state[that.mapKeys[i]]})} >
+              <Icon  name="map" size={35}  />
+          </TouchableOpacity>
     </View>
   </TouchableOpacity>
   <View>{this.showCard(this.state[this.mapKeys[i]], i)}</View>
