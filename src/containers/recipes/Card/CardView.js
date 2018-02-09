@@ -76,7 +76,6 @@ class Map extends Component {
     this.forceUpdate();
   };
   showCard(card, i) {
-
     var that = this;
     if (card.showDetailCard) {
        return (

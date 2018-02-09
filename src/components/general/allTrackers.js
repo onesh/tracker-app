@@ -25,6 +25,9 @@ import { Actions } from 'react-native-router-flux';
 import MapView from 'react-native-maps';
 import { Marker } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Toast from 'react-native-simple-toast';
+import Polyline from '@mapbox/polyline';
+
 
 
 // Components
@@ -57,12 +60,9 @@ class allTrackers extends Component {
 constructor({text}) {
   super();
   this.state = {
-    centre : {
-      latitude: 28.6315,
-      longitude: 77.2167,
-      latitudeDelta: 0.02,
-      longitudeDelta: 0.02,
-    }
+    coords: [],
+    myLoc: {},
+    scale: 0.02
   };
   allmapDataPromise = this.getMapsData();
   allmapDataPromise.then((res) => {this.state.markers = JSON.parse(res._bodyInit); this.forceUpdate()})
@@ -84,6 +84,39 @@ onRegionChange = () => {
 
 }
 
+plotDirection = () => {
+  var initial = {};
+  var that = this;
+  var coords = [];
+  var points;
+  var final =  that.props.device['latitude']  + ',' + that.props.device['longitude'];
+
+navigator.geolocation.getCurrentPosition((loc) =>
+    {
+      initial = loc.coords.latitude + ',' + loc.coords.longitude;
+       that.state.myLoc = loc.coords;
+      //   <Marker
+      //     coordinate={loc.coords}
+      //     title={that.props.device['datetime']}
+      //   />
+      // );
+      fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${initial}&destination=${final}&mode=driving&key=AIzaSyDrdLsKjx15ieOVdKLsKRdp348YkRMGl88`)
+            .then(response => response.json())
+            .then(response => {
+              points = Polyline.decode(response.routes[0].overview_polyline.points);
+              coords = points.map((point, index) => {
+                return  {
+                    latitude : point[0],
+                    longitude : point[1]
+                }
+      });
+      that.state.coords = coords;
+      this.state.scale = 0.5;
+      that.forceUpdate();
+    });
+
+    });
+}
 static defaultProps = { device: {} };
 static componentName = 'allTrackers';
 
@@ -93,6 +126,7 @@ getName = (i) => {
 }
 render = () => {
 var that = this;
+
   return (
 <View>
 
@@ -107,7 +141,7 @@ var that = this;
           <Icon  name='history' size={50} />
       </TouchableOpacity>
 
-      <TouchableOpacity style={{marginLeft: (Sizes.screen.width / 5)}} activeOpacity={0.2} onPress={()=> Actions.pop()}>
+      <TouchableOpacity style={{marginLeft: (Sizes.screen.width / 5)}} activeOpacity={0.2} onPress={this.plotDirection}>
           <Icon  name='map-marker' size={50} />
       </TouchableOpacity>
 
@@ -124,8 +158,8 @@ var that = this;
             region={{
                       latitude: that.props.device['latitude'],
                       longitude: that.props.device['longitude'],
-                      longitudeDelta: 0.02,
-                      latitudeDelta: 0.02
+                      longitudeDelta: that.state.scale,
+                      latitudeDelta: that.state.scale
                   }}
 
               onRegionChange={this.onRegionChange}>
@@ -134,12 +168,26 @@ var that = this;
                 coordinate={{
                           latitude: that.props.device['latitude'],
                           longitude: that.props.device['longitude'],
-                          longitudeDelta: 0.2,
-                          latitudeDelta: 0.2
+                          longitudeDelta: that.state.scale,
+                          latitudeDelta: that.state.scale
                       }}
                 title={that.props.device['datetime']}
-    />
-        </MapView>
+          />
+
+          <Marker
+            coordinate={{
+                      latitude: (!that.state.myLoc['latitude'] === true ? 0.00 : that.state.myLoc['latitude']),
+                      longitude: (!that.state.myLoc['longitude'] === true ? 0.00 : that.state.myLoc['longitude']),
+                      longitudeDelta: 0.2,
+                      latitudeDelta: 0.2
+                  }}
+            title={that.props.device['datetime']}
+      />
+      <MapView.Polyline
+              coordinates={this.state.coords}
+              strokeWidth={5}
+              strokeColor="black"/>
+      </MapView>
     </View>
   </View>
 
