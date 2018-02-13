@@ -90,7 +90,7 @@ class Map extends Component {
         <View style={{flexDirection:'row', flexWrap:'wrap'}}>
             <Icon name="location-arrow" size={25} />
             <Text>&nbsp;&nbsp;&nbsp;&nbsp;</Text>
-            <Text style={{paddingTop: 5}}>{this.state[this.mapKeys[i]].latitude + ',' + this.state[this.mapKeys[i]].longitude}</Text>
+            <Text style={{paddingTop: 5}}>{this.state[this.mapKeys[i]].latitude + ' N,' + this.state[this.mapKeys[i]].longitude + ' E'}</Text>
             <Text>{'\n'}{'\n'}{'\n'}{'\n'}{'\n'}</Text>
         </View>
 
@@ -98,7 +98,7 @@ class Map extends Component {
         <View style={{flexDirection:'row', flexWrap:'wrap'}}>
             <View style={{width: '50%'}}>
               <Button
-                  onPress={() => {}}
+                  onPress={() => Actions.geofensing({device: that.state[that.mapKeys[i]]})}
                   title="GEO-FENSING"
                   color="black"
                   accessibilityLabel="Geo-Fence the tracker"
@@ -194,11 +194,11 @@ class Map extends Component {
     });
     return (
       <View style={[style.container,  {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    padding: 10
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            padding: 10
   }]}>
-      <ActivityIndicator  style={{paddingTop: '50%'}} animating={!this.hasData} size="large" color="#0000ff" />
+      <ActivityIndicator  style={{paddingTop: '50%'}} animating={!this.hasData} size="large" color="white" />
       </View>
       );
     }

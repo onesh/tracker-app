@@ -11,6 +11,7 @@ import { NavbarMenuButton } from '@containers/ui/NavbarMenuButton/NavbarMenuButt
 
 // Scenes
 import allTrackers from '@components/general/allTrackers';
+import geofensing from '@components/general/geofensing';
 import Error from '@components/general/Error';
 import StyleGuide from '@containers/StyleGuideView';
 import Recipes from '@containers/recipes/Browse/BrowseContainer';
@@ -22,6 +23,7 @@ const navbarPropsTabs = {
   sceneStyle: {
     ...AppConfig.navbarProps.sceneStyle,
     paddingBottom: AppSizes.tabbarHeight,
+    paddingTop: 20
   },
 };
 
@@ -51,6 +53,11 @@ const scenes = (
       key={'trackerMap'}
       {...navbarPropsTabs}
       component={allTrackers}
+    />
+    <Scene
+      key={'geofensing'}
+      {...navbarPropsTabs}
+      component={geofensing}
     />
 
 

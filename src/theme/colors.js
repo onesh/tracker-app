@@ -1,12 +1,12 @@
 const app = {
-  background: 'white',
+  background: 'black',
   cardBackground: '#FFFFFF',
   listItemBackground: '#FFFFFF',
 };
 
 const brand = {
   brand: {
-    primary: '#50B7EF',
+    primary: 'black',
     secondary: '#17233D',
   },
 };

@@ -22,7 +22,10 @@ const styles = StyleSheet.create({
   },
   logo: {
     width: AppSizes.screen.width * 0.85,
+    height: 300,
     resizeMode: 'contain',
+    paddingTop: 100,
+    paddingBottom: 100
   },
   whiteText: {
     color: '#FFF',
@@ -40,14 +43,14 @@ class Authenticate extends Component {
         style={[styles.logo]}
       />
 
-    <Spacer size={30} />
       <View style={[AppStyles.row, AppStyles.paddingHorizontal]}>
         <View style={[AppStyles.flex1]}>
           <Button
             title={'Login'}
             icon={{ name: 'lock' }}
             onPress={Actions.login}
-            backgroundColor={'#CB009E'}
+            backgroundColor={'white'}
+            color={'black'}
           />
         </View>
       </View>
@@ -65,7 +68,8 @@ class Authenticate extends Component {
             title={'Sign up'}
             icon={{ name: 'face' }}
             onPress={Actions.signUp}
-            backgroundColor={'#CB009E'}
+            backgroundColor={'white'}
+            color={'black'}
           />
         </View>
       </View>

@@ -62,7 +62,11 @@ constructor({text}) {
   this.state = {
     coords: [],
     myLoc: {},
-    scale: 0.02
+    scale: 0.02,
+    distance: '',
+    duration: '',
+    origin: '',
+    destination: ''
   };
   allmapDataPromise = this.getMapsData();
   allmapDataPromise.then((res) => {this.state.markers = JSON.parse(res._bodyInit); this.forceUpdate()})
@@ -70,6 +74,8 @@ constructor({text}) {
 
 
 }
+static defaultProps = { device: {} };
+static componentName = 'allTrackers';
 
 getMapsData() {
   return   fetch('http://ec2-18-216-151-224.us-east-2.compute.amazonaws.com:8000/getTrackerData', {
@@ -95,11 +101,6 @@ navigator.geolocation.getCurrentPosition((loc) =>
     {
       initial = loc.coords.latitude + ',' + loc.coords.longitude;
        that.state.myLoc = loc.coords;
-      //   <Marker
-      //     coordinate={loc.coords}
-      //     title={that.props.device['datetime']}
-      //   />
-      // );
       fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${initial}&destination=${final}&mode=driving&key=AIzaSyDrdLsKjx15ieOVdKLsKRdp348YkRMGl88`)
             .then(response => response.json())
             .then(response => {
@@ -113,12 +114,18 @@ navigator.geolocation.getCurrentPosition((loc) =>
       that.state.coords = coords;
       this.state.scale = 0.5;
       that.forceUpdate();
-    });
+    }).catch (() => {
+  });
 
+    fetch(`https://maps.googleapis.com/maps/api/distancematrix/json?origins=${initial}&destinations=${final}&mode=driving&key=AIzaSyDp3dF1wHY67lVzyyU1Gd4vkvtNid1ksxQ`)
+          .then(response => response.json())
+          .then ((response) => {
+            that.state.duration = response['rows'][0]['elements'][0]['duration']['text'];
+            that.state.distance = response['rows'][0]['elements'][0]['distance']['text'];
+            that.forceUpdate();
+        });
     });
 }
-static defaultProps = { device: {} };
-static componentName = 'allTrackers';
 
 getName = (i) => {
   if (this.state.markers[i].id) return this.state.markers[i].id;
@@ -171,7 +178,8 @@ var that = this;
                           longitudeDelta: that.state.scale,
                           latitudeDelta: that.state.scale
                       }}
-                title={that.props.device['datetime']}
+                description={that.props.device['datetime']}
+                title={'last updated at'}
           />
 
           <Marker
@@ -181,11 +189,13 @@ var that = this;
                       longitudeDelta: 0.2,
                       latitudeDelta: 0.2
                   }}
-            title={that.props.device['datetime']}
+            description={'Duration: ' + that.state.duration + ', Distance: ' + that.state.distance}
+            title={'Distance and Time Estimate'}
+
       />
       <MapView.Polyline
               coordinates={this.state.coords}
-              strokeWidth={5}
+              strokeWidth={2}
               strokeColor="black"/>
       </MapView>
     </View>
