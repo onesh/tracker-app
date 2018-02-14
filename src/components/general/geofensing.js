@@ -27,7 +27,6 @@ import MapView from 'react-native-maps';
 import { Marker } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Toast from 'react-native-simple-toast';
-import Polyline from '@mapbox/polyline';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 

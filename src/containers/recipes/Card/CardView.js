@@ -15,6 +15,7 @@ import {
   Button
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Sizes from '@theme/sizes';
 
 // Consts and Libs
 import { AppStyles } from '@theme/';
@@ -72,7 +73,13 @@ class Map extends Component {
   };
 
   toggleCardVisibility  = (card) => {
-    card.showDetailCard = !card.showDetailCard;
+
+    try {
+      if (!card.showDetailCard) card.showDetailCard = true;
+      else card.showDetailCard = false;
+  } catch (err) {
+    Toast.show('unable to close this card')
+  }
     this.forceUpdate();
   };
   showCard(card, i) {
@@ -146,7 +153,6 @@ class Map extends Component {
 
         if (!this.state[this.mapKeys[i]].latitudeDelta) this.state[this.mapKeys[i]].latitudeDelta = 0.2;
         if (!this.state[this.mapKeys[i]].longitudeDelta) this.state[this.mapKeys[i]].longitudeDelta = 0.2;
-        if (!this.state[this.mapKeys[i]].showDetailCard) this.state[this.mapKeys[i]].showDetailCard = false;
       toRender.push(
 <View key={this.state[this.mapKeys[i]].id}>
     <TouchableOpacity activeOpacity={0.8} style={[style.mapCard, {flex: 1, flexDirection: 'row', justifyContent: 'space-between'}]} onPress= {() => this.toggleCardVisibility(this.state[this.mapKeys[i]])} key={this.state[this.mapKeys[i]].id}>
@@ -168,7 +174,7 @@ class Map extends Component {
   );
 }
   return (
-<View>
+<View style={{backgroundColor: 'white'}}>
   <View>
     {toRender}
   </View>
