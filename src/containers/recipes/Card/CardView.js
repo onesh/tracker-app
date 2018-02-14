@@ -55,6 +55,7 @@ class Map extends Component {
   constructor() {
   super();
   this.hasData = false;
+  this.activeCard = {id: 0};
 };
 
 
@@ -72,19 +73,18 @@ class Map extends Component {
     });
   };
 
-  toggleCardVisibility  = (card) => {
-
+  toggleCardVisibility  = (cardID) => {
     try {
-      if (!card.showDetailCard) card.showDetailCard = true;
-      else card.showDetailCard = false;
+      if (this.activeCard.id === cardID) this.activeCard.id = 0;
+      else this.activeCard.id = cardID;
   } catch (err) {
-    Toast.show('unable to close this card')
+    Toast.show('unable to close this card');
   }
     this.forceUpdate();
   };
   showCard(card, i) {
     var that = this;
-    if (card.showDetailCard) {
+    if (card.id === this.activeCard.id) {
        return (
       <View style={[style.mapCard, {flexDirection:'row', flexWrap:'wrap', marginTop: 0}]} key={this.state[this.mapKeys[i]].id}>
         <View style={{flexDirection:'row', flexWrap:'wrap'}}>
@@ -155,7 +155,7 @@ class Map extends Component {
         if (!this.state[this.mapKeys[i]].longitudeDelta) this.state[this.mapKeys[i]].longitudeDelta = 0.2;
       toRender.push(
 <View key={this.state[this.mapKeys[i]].id}>
-    <TouchableOpacity activeOpacity={0.8} style={[style.mapCard, {flex: 1, flexDirection: 'row', justifyContent: 'space-between'}]} onPress= {() => this.toggleCardVisibility(this.state[this.mapKeys[i]])} key={this.state[this.mapKeys[i]].id}>
+    <TouchableOpacity activeOpacity={0.8} style={[style.mapCard, {flex: 1, flexDirection: 'row', justifyContent: 'space-between'}]} onPress= {() => this.toggleCardVisibility(this.state[this.mapKeys[i]].id)} key={this.state[this.mapKeys[i]].id}>
       <View style={{flexDirection:'row', flexWrap:'wrap'}} >
         <Icon name="warning" size={35}  />
             <Text>&nbsp;&nbsp;&nbsp;&nbsp;</Text>
