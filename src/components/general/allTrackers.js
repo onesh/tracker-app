@@ -68,6 +68,7 @@ constructor({text}) {
     origin: '',
     destination: ''
   };
+  this.deviceHistory = [];
   allmapDataPromise = this.getMapsData();
   allmapDataPromise.then((res) => {this.state.markers = JSON.parse(res._bodyInit); this.forceUpdate()})
                    .catch((err) => {});
@@ -83,6 +84,28 @@ getMapsData() {
     headers: {
         Accept: 'application/json',
         }
+  });
+};
+
+getSpecificMapsData() {
+  fetch(`http://ec2-18-216-151-224.us-east-2.compute.amazonaws.com:8000/getTrackerData/${this.props.device['id']}`, {
+    method: 'GET',
+  })
+  .then((data) => data.json())
+  .then((data) => {
+    if (data.length) {
+      for (let i = 0; i< data.length; i++) {
+        this.deviceHistory.push(
+          <Marker
+          key={i}
+          coordinate={data[i]}
+          description={data[i]['datetime']}
+          title={'last updated at'}
+    />)
+      }
+    }
+    this.state.scale = 0.6;
+    this.forceUpdate();
   });
 };
 
@@ -144,7 +167,7 @@ var that = this;
   </View>
   <View style={{position: 'absolute', top: (Sizes.screen.height - 120), left: (Sizes.screen.width / 6), zIndex: 6, flex: 1, justifyContent: 'center', flexDirection: 'row'}}>
 
-      <TouchableOpacity  activeOpacity={0.2} onPress={()=> Actions.pop()}>
+      <TouchableOpacity  activeOpacity={0.2} onPress={()=> this.getSpecificMapsData()}>
           <Icon  name='history' size={50} />
       </TouchableOpacity>
 
@@ -152,7 +175,7 @@ var that = this;
           <Icon  name='map-marker' size={50} />
       </TouchableOpacity>
 
-      <TouchableOpacity style={{marginLeft: (Sizes.screen.width / 5)}} activeOpacity={0.2} onPress={()=> this.forceUpdate()}>
+      <TouchableOpacity style={{marginLeft: (Sizes.screen.width / 5)}} activeOpacity={0.2} onPress={()=> { this.state.scale = 0.02; this.state.coords = []; this.forceUpdate()}}>
       <Icon  name='thumb-tack' size={50} />
       </TouchableOpacity>
 
@@ -193,6 +216,7 @@ var that = this;
             title={'Distance and Time Estimate'}
 
       />
+      {this.deviceHistory}
       <MapView.Polyline
               coordinates={this.state.coords}
               strokeWidth={2}
