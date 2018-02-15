@@ -62,6 +62,36 @@ res.end('200')
 
 });
 
+
+
+
+app.get('/getTrackerData/:id', function (req, res) {
+
+var tdata = fs.readFileSync('./database/tracker-logs.json');
+var parsedData = JSON.parse(tdata)["9310154213"];
+
+var data = [];
+var ctr = 0;
+
+for (i=0; i< parsedData.length	; i++) {
+
+
+if (parsedData[i].id && parsedData[i].id === req.params['id'] ) {
+	if (( parsedData.length - i ) < 10  ) data.push(parsedData[++ctr]);
+	}
+	
+
+}
+
+res.setHeader('Content-Type','application/json');
+console.log(data);
+res.send(data);
+res.end('200')
+
+});
+
+
+
 app.post('/addDevice', function (req, res) {
 
 });
