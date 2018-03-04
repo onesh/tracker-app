@@ -13,7 +13,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   TouchableHighlight,
-  TextInput
+  TextInput,
+  Modal
  } from 'react-native';
  import { Button } from 'react-native-elements'
 
@@ -57,7 +58,7 @@ constructor({text}) {
     myloc:  {}
   };
 
-
+this.modalVisible = false;
 }
 static defaultProps = { device: {} };
 static componentName = 'geofensing';
@@ -65,6 +66,42 @@ static componentName = 'geofensing';
 
 onRegionChange = () => {
 
+}
+
+getRadiusModal (coords) {
+  if (this.modalVisible) {
+          return (<View
+            style={[{opacity: 0.9}, {position: 'absolute', zIndex: 7, top: ( Sizes.screen.width / 1.5 ), height: 150, width: Sizes.screen.width - 40, paddingLeft: 20, backgroundColor: 'white', marginTop: 40}]}
+            key = {'radiusModal'}
+          >
+
+              <Text style={{fontSize: 15}}>  set radius around the location: </Text>
+              <TextInput
+              style={{paddingBottom: 10, paddingLeft: 10}}
+              keyboardType={'numeric'}
+              />
+
+                  <View style={{flexDirection:'row', flexWrap:'wrap', marginTop: 40}}>
+                  <View style={{width: '30%'}}>
+                    <Button
+                        onPress={() => {this.modalVisible = false; this.forceUpdate();}}
+                        title="ok"
+                        color="black"
+                    />
+                  </View>
+                  <View style={{width: '30%'}}></View>
+                  <View style={{width: '40%'}}>
+                    <Button
+                        onPress={() => {this.modalVisible = false; this.forceUpdate();}}
+                        title="cancel"
+                        color="black"
+                    />
+                  </View>
+                </View>
+
+              </View>
+      );
+}
 }
  GooglePlacesInput = () => {
   return (
@@ -124,7 +161,7 @@ var that = this;
 
   return (
 <View>
-
+{[this.getRadiusModal()]}
   <View style={{position: 'absolute', top: 50, left: 30, zIndex: 6}}>
     <TouchableOpacity activeOpacity={0.2} onPress={()=> Actions.pop()}>
         <Icon name='chevron-left' size={30} />
@@ -144,7 +181,8 @@ var that = this;
 
               onRegionChange={this.onRegionChange}>
 
-              <Marker
+              <Marker draggable
+                onDragEnd={ (e) =>  {this.modalVisible = true; this.getRadiusModal (e.nativeEvent.coordinate); this.forceUpdate()} }
                 coordinate={Object.keys(that.state.myloc).length === 0 ? this.props.device : that.state.myloc}
             />
       </MapView>
