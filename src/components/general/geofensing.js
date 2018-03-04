@@ -71,7 +71,7 @@ onRegionChange = () => {
 getRadiusModal (coords) {
   if (this.modalVisible) {
           return (<View
-            style={[{opacity: 0.9}, {position: 'absolute', zIndex: 7, top: ( Sizes.screen.width / 1.5 ), height: 150, width: Sizes.screen.width - 40, paddingLeft: 20, backgroundColor: 'white', marginTop: 40}]}
+            style={[{opacity: 0.9}, {position: 'absolute', zIndex: 7, top: ( Sizes.screen.width / 1.5 ), height: 150, width: Sizes.screen.width - 40, marginLeft: 20, backgroundColor: 'white', marginTop: 40}]}
             key = {'radiusModal'}
           >
 
