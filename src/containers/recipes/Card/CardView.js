@@ -13,7 +13,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   Button,
-  TextInput
+  TextInput,
+  Image
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Sizes from '@theme/sizes';
@@ -47,6 +48,10 @@ const style = StyleSheet.create({
     backgroundColor: 'white',
     shadowOffset:{  width: 2,  height: 2 },
     shadowColor: 'black',
+  },
+  icon : {
+    height: 50,
+    width: 50
   }
 });
 
@@ -199,7 +204,10 @@ class Map extends Component {
           <View key={this.state[this.mapKeys[i]].id}>
           <TouchableOpacity activeOpacity={0.8} style={[style.mapCard, {flex: 1, flexDirection: 'row', justifyContent: 'space-between'}]} onPress= {() => this.toggleCardVisibility(this.state[this.mapKeys[i]].id)} key={this.state[this.mapKeys[i]].id}>
           <View style={{flexDirection:'row', flexWrap:'wrap'}} >
-          <Icon name="warning" size={35}  />
+          <Image
+          style = {style.icon}
+          source={require('../../../images/checkmark.png')}
+          />
           <Text>&nbsp;&nbsp;&nbsp;&nbsp;</Text>
           <Text style={{ flexDirection:'row', flexWrap:'wrap', fontSize: 20}}>{this.state[this.mapKeys[i]].id}({!this.state[this.mapKeys[i]].nickname === true ? this.state[this.mapKeys[i]].id : this.state[this.mapKeys[i]].nickname}) {'\n'}{'\n'}<Text>
           Last Update: {this.state[this.mapKeys[i]].datetime}</Text>
@@ -207,7 +215,10 @@ class Map extends Component {
           </Text>
           <Text>&nbsp;&nbsp;&nbsp;&nbsp;</Text>
           <TouchableOpacity activeOpacity={0.2} onPress={() => Actions.trackerMap({device: that.state[that.mapKeys[i]]})} >
-          <Icon  name="map" size={35}  />
+          <Image
+          style = {style.icon}
+          source={require('../../../images/map.png')}
+            />
           </TouchableOpacity>
           </View>
           </TouchableOpacity>
